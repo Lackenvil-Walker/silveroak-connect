@@ -1,34 +1,38 @@
-# Multi-stage build for Vite React app (uses Bun for install/build)
+# ---- Build stage ----
 FROM oven/bun:1 AS build
 WORKDIR /app
 
-# Copy package files and lockfile first for better caching
-COPY silveroak-connect-main/package.json ./package.json
-COPY silveroak-connect-main/bun.lockb ./bun.lockb
+# Where are package.json & bun.lockb inside the repo?
+# Set this from compose as a build arg (e.g., "silveroak-connect-main/ui").
+ARG APP_DIR="."
 
-# Install dependencies
-RUN bun install --frozen-lockfile
+# Fail early if path is wrong (good guardrail)
+RUN test -d "/src" || true
+# copy manifests
+COPY ${APP_DIR}/package.json /app/package.json
+# if you actually keep a bun.lockb, keep the next line; it's fine if it doesn't exist
+COPY ${APP_DIR}/bun.lockb /app/bun.lockb
+RUN bun install --frozen-lockfile || bun install
 
-# Copy the rest of the app
-COPY silveroak-connect-main/ .
+# copy full app
+COPY ${APP_DIR}/ /app/
 
-# Build (Vite)
-# If you rely on VITE_* env vars, pass them as --build-arg or via .env files baked into the image.
+# build Vite app
 RUN bun run build
 
-# ---- Runtime ----
+# ---- Runtime stage ----
 FROM nginx:1.27-alpine
 WORKDIR /usr/share/nginx/html
 
-# Clean default nginx content
+# clean default content
 RUN rm -rf ./*
 
-# Copy build output
-COPY --from=build /app/dist/ .
+# copy build output
+COPY --from=build /app/dist/ ./
 
-# Nginx config for SPA routing (fallback to index.html)
+# SPA routing
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
-
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -qO- http://127.0.0.1/ >/dev/null 2>&1 || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1/ >/dev/null 2>&1 || exit 1

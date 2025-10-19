@@ -2,11 +2,14 @@ version: "3.9"
 services:
   web:
     build:
-      context: .
+      context: .               # build from the repo root
       dockerfile: Dockerfile
-      # Pass build-time env if your app needs VITE_* values during build
-      # args:
-      #   VITE_API_URL: ${VITE_API_URL}
+      args:
+        # point to your NEW subfolder that contains package.json
+        # EXAMPLES:
+        # APP_DIR: "silveroak-connect-main/ui"
+        # APP_DIR: "silveroak-connect-main/frontend"
+        APP_DIR: "silveroak-connect-main"   # <-- CHANGE THIS to your actual new path
     image: silveroak-connect:latest
     container_name: silveroak-connect
     ports:
