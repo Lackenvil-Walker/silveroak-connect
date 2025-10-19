@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Pass build-time env if your app needs VITE_* values during build
+      # args:
+      #   VITE_API_URL: ${VITE_API_URL}
+    image: silveroak-connect:latest
+    container_name: silveroak-connect
+    ports:
+      - "8080:80"
+    restart: always
