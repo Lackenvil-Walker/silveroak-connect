@@ -3,8 +3,8 @@ FROM oven/bun:1 AS build
 WORKDIR /app
 
 # Where are package.json & bun.lockb inside the repo?
-# Set this from compose as a build arg (e.g., "silveroak-connect-main/ui").
-ARG APP_DIR="."
+# Set this from compose as a build arg (e.g., "main").
+ARG APP_DIR="main"
 
 # Fail early if path is wrong (good guardrail)
 RUN test -d "/src" || true

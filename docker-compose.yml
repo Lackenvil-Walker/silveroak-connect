@@ -9,7 +9,7 @@ services:
         # EXAMPLES:
         # APP_DIR: "silveroak-connect-main/ui"
         # APP_DIR: "silveroak-connect-main/frontend"
-        APP_DIR: "silveroak-connect-main/main"   # <-- CHANGE THIS to your actual new path
+        APP_DIR: "main"   # <-- Changed from "silveroak-connect-main/main" to match actual path
     image: silveroak-connect:latest
     container_name: silveroak-connect
     ports:
