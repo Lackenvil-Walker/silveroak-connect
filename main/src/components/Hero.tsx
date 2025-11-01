@@ -1,12 +1,6 @@
-import heroBg from "@/assets/hero-bg.jpg";
-
 const Hero = () => {
   return (
     <section className="relative min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/75" />
       
       <div className="container mx-auto px-4 relative z-10 py-32 md:py-40">
