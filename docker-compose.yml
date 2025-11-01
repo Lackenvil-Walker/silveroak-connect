@@ -11,7 +11,7 @@ services:
         # APP_DIR: "silveroak-connect-main/frontend"
         APP_DIR: "main"   # <-- Changed from "silveroak-connect-main/main" to match actual path
     image: silveroak-connect:latest
-    container_name: silveroak-connect
+    # container_name: silveroak-connect  # Removed to avoid naming conflicts
     ports:
       - "8080:80"
     restart: always
